@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../model/filter_button_widget.dart';
+import '../../../view_model/filter_view_model.dart';
 
 Future<void> showFilterModal(
 	BuildContext context,
-	FilterButtonWidgetModel model
+	FilterButtonWidgetViewModel modal,
+	Widget widget
 	) async {
 	return await showModalBottomSheet(
 		context: context,
@@ -28,9 +29,9 @@ Future<void> showFilterModal(
 							Expanded(
 								flex: 3,
 								child: Text(
-									model.filterModalTitle,
+									modal.filterModalTitle,
 									textAlign: TextAlign.center,
-									style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+									style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
 								)),
 							Expanded(
 								flex: 1,
@@ -42,7 +43,7 @@ Future<void> showFilterModal(
 									)))
 						],
 					),
-					model.filterComponents
+					widget
 
 				],
 			),

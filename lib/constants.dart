@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/datetime.dart';
 import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/filter_lcoation.dart';
-import 'model/filter_button_widget.dart';
+import 'package:optomatica_race/view_model/filter_view_model.dart';
 
 // images paths
 
@@ -19,10 +19,3 @@ const borderColor = Color.fromRGBO(205, 211, 228, 1);
 const orangeColor = Color.fromRGBO(255, 183, 21, 1);
 // filter widgets list
 
-List<FilterButtonWidgetModel> filterWidgetsList = [
-  FilterButtonWidgetModel(filterComponents: const FilterLocationWidget(), filterTitle: 'Type', filterModalTitle: 'Run type', submitOnClick: () {}),
-  FilterButtonWidgetModel(filterComponents: const FilterLocationWidget(), filterTitle: 'Location', filterModalTitle: 'Race Location', submitOnClick: () {}),
-  FilterButtonWidgetModel(filterComponents: const FilterLocationWidget(), filterTitle: 'Distance', filterModalTitle: 'Race Distance', submitOnClick: () {}),
-  FilterButtonWidgetModel(filterComponents: const DateTimeModalWidget(), filterTitle: 'Date', filterModalTitle: 'Race Date', submitOnClick: () {}),
-
-];

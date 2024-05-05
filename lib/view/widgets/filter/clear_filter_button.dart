@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
-import '../../../model/filter_button_widget.dart';
+import '../../../view_model/filter_view_model.dart';
 import 'filter_modal.dart';
 import 'modal_filter_widgets/clear_filter.dart';
 
@@ -10,7 +10,7 @@ class ClearFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FilterButtonWidgetModel modal =   FilterButtonWidgetModel(filterComponents: const ClearFilterWidget(), filterTitle: 'Clear Filter', filterModalTitle: 'Clear Filter', submitOnClick: () {});
+    FilterButtonWidgetViewModel modal =   FilterButtonWidgetViewModel(filterTitle: 'Clear Filter', filterModalTitle: 'Clear Filter', submitOnClick: () {});
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -21,7 +21,7 @@ class ClearFilterButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)),
           child: InkWell(
             onTap: () {
-               showFilterModal(context,modal);
+               showFilterModal(context,modal,const ClearFilterWidget());
             },
             child: const SizedBox(
               child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [

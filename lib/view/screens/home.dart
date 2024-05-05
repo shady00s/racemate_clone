@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
               title: const Image(
                 image: AssetImage(logo),
               ),
-              flexibleSpace:const Image(
+              flexibleSpace: const Image(
                   fit: BoxFit.cover,
                   image: AssetImage(
                     appbarBg,
@@ -28,28 +28,38 @@ class HomeScreen extends StatelessWidget {
                     image: AssetImage(
                       notificationIcon,
                     )),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
                 Image(
                     fit: BoxFit.cover,
                     image: AssetImage(
                       profilePicture,
                     )),
-                SizedBox(width: 20,),
+                SizedBox(
+                  width: 20,
+                ),
               ],
               bottom: const TabBar(
                 indicatorWeight: 5,
                 tabs: [
-                  Tab(child: Text('RUN'),),
-                  Tab(child: Text('COMMUNITY'),),
-                  Tab(child: Text('RACES'),),
+                  Tab(
+                    child: Text('RUN'),
+                  ),
+                  Tab(
+                    child: Text('COMMUNITY'),
+                  ),
+                  Tab(
+                    child: Text('RACES'),
+                  ),
                 ],
               ),
             ),
-            body: const TabBarView(
+            body: TabBarView(
               children: [
-                RacesScreen(),
-                ChallengesScreen(),
-                CommunityScreen(),
+                RacesView(),
+                const ChallengesScreen(),
+                const CommunityScreen(),
               ],
             ),
           )),

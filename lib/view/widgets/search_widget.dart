@@ -18,6 +18,7 @@ class _SearchWidgetState extends State<SearchWidget> {
             minHeight: 100,
             maxHeight: 400,),
         builder: (context, controller) => SearchBar(
+          hintText: 'Search',
               onTap: () {
                 controller.openView();
               },
