@@ -16,7 +16,7 @@ class _RacesViewState extends State<RacesView> {
   final RacesViewModel racesViewModel = RacesViewModel();
     @override
   void initState() {
-        racesViewModel.getDataFromJson();
+        racesViewModel.fetchData();
     super.initState();
   }
   @override

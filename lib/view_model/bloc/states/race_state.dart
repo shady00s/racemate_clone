@@ -8,7 +8,9 @@ class InitState extends RaceState {}
 class FetchingSuccessState extends RaceState {
 	final List<RacesDataModel> listOfRaces;
 	final List<SelectedLocationFilterRacesModel>selectedLocationFilterRacesModel;
-	FetchingSuccessState(this.listOfRaces, this.selectedLocationFilterRacesModel);
+	final List<FilterTypeModel>filterTypeModel;
+	final int numberOfFilters;
+	FetchingSuccessState(this.listOfRaces, this.selectedLocationFilterRacesModel, this.filterTypeModel, this.numberOfFilters);
 }
 
 class FetchingFailedState extends RaceState {

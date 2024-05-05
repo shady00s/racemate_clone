@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
-import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/datetime.dart';
-import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/filter_lcoation.dart';
+import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/date_filter.dart';
+import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/location_filter.dart';
 import 'package:optomatica_race/view_model/filter_view_model.dart';
 
 // images paths

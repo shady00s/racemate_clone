@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../constants.dart';
 import '../../model/races_model.dart';
 
@@ -22,65 +23,68 @@ class RaceCardWidget extends StatelessWidget {
             ),
             Expanded(
               flex: 4,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Icon(Icons.stars_rounded),
-                  Text(
-                    raceData.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 16, color: Color.fromRGBO(0, 10, 53, 1), fontWeight: FontWeight.bold),
-                  ),
-                  raceData.organizer != null
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Organized by',
-                              style: TextStyle(color: Color.fromRGBO(142, 155, 195, 1)),
-                            ),
-                            Text(
-                              raceData.organizer ?? '',
-                              style: const TextStyle(color: Color.fromRGBO(189, 80, 0, 1)),
-                            ),
-                          ],
-                        )
-                      : const SizedBox(),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 4,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWithIcon(
-                              iconData: Icons.route,
-                              data: raceData.distances.join(','),
-                            ),
-                            TextWithIcon(
-                              iconData: Icons.date_range_rounded,
-                              data: DateTime.parse(raceData.date).toIso8601String(),
-                            ),
-                            TextWithIcon(
-                              iconData: Icons.location_on,
-                              data: '${raceData.city}, ${raceData.country}',
-                            ),
-                          ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Icon(Icons.stars_rounded),
+                    Text(
+                      raceData.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16, color: Color.fromRGBO(0, 10, 53, 1), fontWeight: FontWeight.bold),
+                    ),
+                    raceData.organizer != null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Organized by',
+                                style: TextStyle(color: Color.fromRGBO(142, 155, 195, 1)),
+                              ),
+                              Text(
+                                raceData.organizer ?? '',
+                                style: const TextStyle(color: Color.fromRGBO(189, 80, 0, 1)),
+                              ),
+                            ],
+                          )
+                        : const SizedBox(),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextWithIcon(
+                                iconData: Icons.route,
+                                data: '${raceData.distances.join('K, ')}K',
+                              ),
+                              TextWithIcon(
+                                iconData: Icons.date_range_rounded,
+                                data:DateFormat('d MMMM, y').format(DateTime.parse(raceData.date)),
+                              ),
+                              TextWithIcon(
+                                iconData: Icons.location_on,
+                                data: '${raceData.city}, ${raceData.country}',
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Expanded(
-                          flex: 1,
-                          child: Image(
-                            image: AssetImage('assets/images/share.png'),
-                          )),
-                      const SizedBox(
-                        width: 15,
-                      )
-                    ],
-                  )
-                ],
+                        const Expanded(
+                            flex: 1,
+                            child: Image(
+                              image: AssetImage('assets/images/share.png'),
+                            )),
+                        const SizedBox(
+                          width: 15,
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],

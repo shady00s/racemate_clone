@@ -15,9 +15,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Races',
       theme: ThemeData(
-        primaryColor:whiteBackground,
-           datePickerTheme: DatePickerThemeData(
-            todayBackgroundColor: MaterialStateProperty.resolveWith((states) => whiteBackground),
+        sliderTheme: const SliderThemeData(
+          overlayColor: orangeColor,
+          inactiveTickMarkColor: orangeColor,
+          thumbColor: orangeColor,
+        ),
+        primaryColor: whiteBackground,
+        datePickerTheme: DatePickerThemeData(
+          todayBackgroundColor: MaterialStateProperty.resolveWith((states) => whiteBackground),
           dayStyle: const TextStyle(color: blueColor),
         ),
         searchBarTheme: SearchBarThemeData(

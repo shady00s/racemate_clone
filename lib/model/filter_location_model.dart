@@ -13,9 +13,21 @@ class FilterLocationModel {
 
 
 class SelectedLocationFilterRacesModel{
-  final bool selected;
+   bool selected;
  final FilterLocationModel filterLocationModel;
  final RacesDataModel racesDataModel;
 
   SelectedLocationFilterRacesModel( {required this.racesDataModel,required this.selected, required this.filterLocationModel});
+}
+
+class FilterTypeModel{
+    final String type;
+    FilterTypeModel({required this.type});
+
+}
+
+class FilterDistanceModel{
+    final String distance;
+    FilterDistanceModel({required this.distance});
+
 }

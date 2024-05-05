@@ -10,14 +10,37 @@ class RacesViewModel {
     return raceCubit.listOfRaces;
   }
 
-  Future<void> getDataFromJson() async {
-    return await raceCubit.getDataFromJson();
+  Future<void> fetchData() async {
+    return await raceCubit.fetchData();
   }
 
-  void filterRacesByLocationFilter(SelectedLocationFilterRacesModel value,int index){
-      raceCubit.filterRacesByLocationFilter(value,index);
+  void filterRacesByLocationFilter(SelectedLocationFilterRacesModel value, int index, selected) {
+    raceCubit.filterLocationListGetter(value, index, selected);
   }
 
-  FilterButtonWidgetViewModel locationFilter = FilterButtonWidgetViewModel(filterTitle: 'Location', filterModalTitle: 'Race Location', submitOnClick: () {});
+  void clearAllFilters (){
+    raceCubit.clearAllFilters();
+  }
+  void resetSelectLocations() {
+    raceCubit.resetSelectLocations();
+  }
 
+  void resetSelectTypes() {
+    raceCubit.resetSelectLocations();
+  }
+
+  void resetSelectDistance() {
+    raceCubit.resetSelectDistance();
+  }
+
+  void submitFilterData() {
+    raceCubit.submitFilterData();
+  }
+
+  FilterButtonWidgetViewModel locationFilter = FilterButtonWidgetViewModel(filterTitle: 'Location', filterModalTitle: 'Race Location');
+  FilterButtonWidgetViewModel typeFilter = FilterButtonWidgetViewModel(
+    filterTitle: 'Type',
+    filterModalTitle: 'Race Type',
+  );
+  FilterButtonWidgetViewModel distanceFilter = FilterButtonWidgetViewModel(filterTitle: 'Distance', filterModalTitle: 'Race Distance');
 }
