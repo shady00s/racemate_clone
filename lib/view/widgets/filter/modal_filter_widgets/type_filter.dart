@@ -20,14 +20,15 @@ class FilterTypeWidget extends StatelessWidget {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: ListView.builder(
-                  itemCount: state.filterTypeModel.length,
+                  itemCount: state.selectedFilterTypeModel.length,
                   itemBuilder: (context, index) => RadioListTile(
-                    title: Text(state.filterTypeModel[index].type),
-                    value: state.filterTypeModel[index].type,
+                    title: Text(state.selectedFilterTypeModel[index].type),
+                    value: state.selectedFilterTypeModel[index].type,
                     onChanged: (newValue) {
-                      // racesViewModel.filterRacesByLocationFilter(state.selectedLocationFilterRacesModel[index], index, newValue);
+                      print(newValue);
+                      racesViewModel.filterTypeListGetter(state.selectedFilterTypeModel[index].type, index, newValue);
                     },
-                    controlAffinity: ListTileControlAffinity.trailing, groupValue: null,
+                    controlAffinity: ListTileControlAffinity.trailing, groupValue: state.selectedFilterTypeModel[index].groupValue,
                   ),
                 ),
               ),

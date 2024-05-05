@@ -54,7 +54,7 @@ class RacesFilterWidget extends StatelessWidget {
                           onPressed: () {
                             racesViewModel.submitFilterData();
                           },
-                          title: '',
+                          title: 'Done',
                         ),
                       ),
                       FilterButtonWidget(
@@ -63,7 +63,7 @@ class RacesFilterWidget extends StatelessWidget {
                         onCancel: racesViewModel.resetSelectLocations,
                         bottomWidget: SubmitFilterButton(
                           onPressed: () {},
-                          title: '',
+                          title: 'Done',
                         ),
                         hasActiveFilters: true,
                       ),
@@ -74,7 +74,7 @@ class RacesFilterWidget extends StatelessWidget {
                         onCancel: racesViewModel.resetSelectLocations,
                         bottomWidget: SubmitFilterButton(
                           onPressed: () {},
-                          title: '',
+                          title: 'Done',
                         ),
                       ),
                     ],

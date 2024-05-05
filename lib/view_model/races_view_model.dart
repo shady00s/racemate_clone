@@ -14,10 +14,13 @@ class RacesViewModel {
     return await raceCubit.fetchData();
   }
 
-  void filterRacesByLocationFilter(SelectedLocationFilterRacesModel value, int index, selected) {
+  void filterLocationListGetter(SelectedLocationFilterRacesModel value, int index, selected) {
     raceCubit.filterLocationListGetter(value, index, selected);
   }
 
+  void filterTypeListGetter(String value, int index,newValue) {
+    raceCubit.filterTypeListGetter(value, index,newValue);
+  }
   void clearAllFilters (){
     raceCubit.clearAllFilters();
   }

@@ -8,14 +8,14 @@ import '../../model/races_model.dart';
 class RaceCubit extends Cubit<RaceState> {
   RaceCubit() : super(InitState());
   List<RacesDataModel> listOfRaces = [];
-  List<SelectedLocationFilterRacesModel> list = [];
   List<SelectedLocationFilterRacesModel> selectedLocationFilterRacesModel = [];
-  List<FilterTypeModel> raceTypeList = [];
+  List<FilterTypeModel> selectedRaceTypeList = [];
   List<String> locationsList = [];
   List<String> typesList = [];
   DateTime? startDate;
   DateTime? endDate;
   int numberOfFilters = 1;
+
   // Fetching data from JSON
   Future<void> getDataFromJson() async {
     try {
@@ -30,6 +30,7 @@ class RaceCubit extends Cubit<RaceState> {
       emit(FetchingFailedState(error: err.toString()));
     }
   }
+
   // initialize  data from JSON and set the filters
   Future<void> fetchData() async {
     try {
@@ -37,7 +38,7 @@ class RaceCubit extends Cubit<RaceState> {
       //setting filters data
       getAllLocationsFilter();
       getAllTypesFilter();
-      emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, raceTypeList,numberOfFilters));
+      emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
     } catch (err) {
       emit(FetchingFailedState(error: err.toString()));
     }
@@ -54,71 +55,96 @@ class RaceCubit extends Cubit<RaceState> {
       }
     }
     countryCount.forEach((key, value) {
-      list.add(SelectedLocationFilterRacesModel(
+      selectedLocationFilterRacesModel.add(SelectedLocationFilterRacesModel(
           selected: true,
           filterLocationModel: FilterLocationModel(
             countries: '${value['name']} (${value['number']})',
           ),
           racesDataModel: value['data']));
     });
-    selectedLocationFilterRacesModel = list;
   }
 
   //getting all race types
   void getAllTypesFilter() {
-    Map<String, dynamic> countryCount = {};
+    Map<String, dynamic> typeCount = {};
     for (var e in listOfRaces) {
-      if (countryCount[e.type] == null) {
-        countryCount[e.type] = {
+      if (typeCount[e.type] == null) {
+        typeCount[e.type] = {
           'name': e.type,
         };
       }
     }
     List<FilterTypeModel> list = [];
-    countryCount.forEach((key, value) {
-      list.add(FilterTypeModel(type: value['name']));
+    typeCount.forEach((key, value) {
+      list.add(FilterTypeModel(type: value['name'], groupValue: null));
     });
-    raceTypeList = list;
+    selectedRaceTypeList = list;
   }
 
-  Future<void> clearAllFilters() async{
+  Future<void> clearAllFilters() async {
     await getDataFromJson();
-     numberOfFilters = 0;
+    numberOfFilters = 0;
     resetSelectLocations();
   }
 
+  void updateFilterNumber() {}
+
   // Set new selected races based on location filter
-   void filterLocationListGetter(SelectedLocationFilterRacesModel data, int index, selected)  {
-    SelectedLocationFilterRacesModel newSelectedLocationFilterRacesModel = SelectedLocationFilterRacesModel(
-        selected: selected,
-        filterLocationModel: data.filterLocationModel,
-        racesDataModel: data.racesDataModel);
+  void filterLocationListGetter(SelectedLocationFilterRacesModel data, int index, selected) {
+    SelectedLocationFilterRacesModel newSelectedLocationFilterRacesModel = SelectedLocationFilterRacesModel(selected: selected, filterLocationModel: data.filterLocationModel, racesDataModel: data.racesDataModel);
 
     List<SelectedLocationFilterRacesModel> updatedSelectedLocationFilterRacesModel = List.from(selectedLocationFilterRacesModel);
     updatedSelectedLocationFilterRacesModel[index] = newSelectedLocationFilterRacesModel;
     selectedLocationFilterRacesModel = updatedSelectedLocationFilterRacesModel;
 
-    if (newSelectedLocationFilterRacesModel.selected == true &&
-        !locationsList.contains(newSelectedLocationFilterRacesModel.racesDataModel.country)) {
+    if (newSelectedLocationFilterRacesModel.selected == true && !locationsList.contains(newSelectedLocationFilterRacesModel.racesDataModel.country)) {
       locationsList.add(newSelectedLocationFilterRacesModel.racesDataModel.country);
-    }// to remove the unselected locations
-    else if (newSelectedLocationFilterRacesModel.selected == false &&
-        locationsList.contains(newSelectedLocationFilterRacesModel.racesDataModel.country)){
+    } // to remove the unselected locations
+    else if (newSelectedLocationFilterRacesModel.selected == false && locationsList.contains(newSelectedLocationFilterRacesModel.racesDataModel.country)) {
       locationsList.remove(newSelectedLocationFilterRacesModel.racesDataModel.country);
     }
-    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, raceTypeList,numberOfFilters));
+    filterDistanceListGetter();
+    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
   }
 
   // Set new selected races based on distance filter
-  void filterDistanceListGetter(){}
+  void filterTypeListGetter(String value, int index, String? newValue) {
+    FilterTypeModel newFilterType = FilterTypeModel(type: value, groupValue: newValue);
 
+    // Ensure index is within bounds
+    if (index >= 0 && index < selectedRaceTypeList.length) {
+      List<FilterTypeModel> updatedSelectedRaceTypeList = List.from(selectedRaceTypeList);
+      updatedSelectedRaceTypeList[index] = newFilterType;
+      selectedRaceTypeList = updatedSelectedRaceTypeList;
+
+      // Update typesList based on selection
+      if (newFilterType.groupValue == null && !typesList.contains(newFilterType.type)) {
+        typesList.add(newFilterType.type);
+      } else if (newFilterType.groupValue != null && typesList.contains(newFilterType.type)) {
+        typesList.remove(newFilterType.type);
+      }
+
+      // Consider emitting state here or based on your application logic
+      emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
+    }
+  }
+
+  // Set new selected races based on distance filter
+  void filterDistanceListGetter() {
+    if (locationsList.isNotEmpty) {
+      numberOfFilters + 1;
+    }
+    if (typesList.isNotEmpty) {
+      numberOfFilters + 1;
+    }
+  }
 
 // reset all filter locations to true (default)
   void resetSelectLocations() {
     for (var model in selectedLocationFilterRacesModel) {
       model.selected = true;
     }
-    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, raceTypeList,numberOfFilters));
+    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
   }
 
   void resetSelectDistance() {
@@ -139,8 +165,13 @@ class RaceCubit extends Cubit<RaceState> {
   Future<void> submitFilterData() async {
     // to re-fetch data from json
     await getDataFromJson();
-    List<RacesDataModel> filteredLocationRaces = listOfRaces.where((element) => locationsList.contains(element.country)).toList();
-    print(filteredLocationRaces);
-     emit(FetchingSuccessState(filteredLocationRaces, selectedLocationFilterRacesModel, raceTypeList,numberOfFilters));
+    List<RacesDataModel> filteredLocationRaces = List.from(listOfRaces);
+    if (locationsList.isNotEmpty) {
+      filteredLocationRaces = listOfRaces.where((element) => locationsList.contains(element.country)).toList();
+    }
+    if (typesList.isNotEmpty) {
+      filteredLocationRaces = listOfRaces.where((element) => typesList.contains(element.type)).toList();
+    }
+    emit(FetchingSuccessState(filteredLocationRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
   }
 }

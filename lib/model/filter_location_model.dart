@@ -22,7 +22,8 @@ class SelectedLocationFilterRacesModel{
 
 class FilterTypeModel{
     final String type;
-    FilterTypeModel({required this.type});
+    final String? groupValue;
+    FilterTypeModel( {required this.type,required this.groupValue,});
 
 }
 

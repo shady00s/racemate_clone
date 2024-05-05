@@ -15,7 +15,7 @@ class SubmitFilterButton extends StatelessWidget {
       child: MaterialButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         color: orangeColor,
-        onPressed: (){onPressed();},child:  Text(title,style: const TextStyle(fontWeight: FontWeight.bold),),),
+        onPressed: (){onPressed();},child:  Text(title,style: const TextStyle(fontWeight: FontWeight.bold,color: blueColor),),),
     );
   }
 }

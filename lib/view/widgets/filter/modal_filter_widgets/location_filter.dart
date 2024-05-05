@@ -28,7 +28,7 @@ class FilterLocationWidget extends StatelessWidget {
                     title: Text(state.selectedLocationFilterRacesModel[index].filterLocationModel.countries),
                     value: state.selectedLocationFilterRacesModel[index].selected,
                     onChanged: (newValue) {
-                      racesViewModel.filterRacesByLocationFilter(state.selectedLocationFilterRacesModel[index], index, newValue);
+                      racesViewModel.filterLocationListGetter(state.selectedLocationFilterRacesModel[index], index, newValue);
                     },
                     controlAffinity: ListTileControlAffinity.trailing,
                   ),
