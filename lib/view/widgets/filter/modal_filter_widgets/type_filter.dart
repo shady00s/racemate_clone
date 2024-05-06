@@ -25,7 +25,6 @@ class FilterTypeWidget extends StatelessWidget {
                     title: Text(state.selectedFilterTypeModel[index].type),
                     value: state.selectedFilterTypeModel[index].type,
                     onChanged: (newValue) {
-                      print(newValue);
                       racesViewModel.filterTypeListGetter(state.selectedFilterTypeModel[index].type, index, newValue);
                     },
                     controlAffinity: ListTileControlAffinity.trailing, groupValue: state.selectedFilterTypeModel[index].groupValue,

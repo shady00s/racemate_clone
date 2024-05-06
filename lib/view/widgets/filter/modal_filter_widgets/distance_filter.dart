@@ -17,11 +17,20 @@ class FilterDistanceWidget extends StatelessWidget {
 				if (state is FetchingSuccessState){
 					return DecoratedBox(
 						decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, style: BorderStyle.solid, width: 1))),
-						child: SizedBox(
-							height: MediaQuery.of(context).size.height * 0.2,
-							child: Slider(min: 0,max:45, value: 0, onChanged: (change){
-
-							})
+						child: Column(
+							crossAxisAlignment: CrossAxisAlignment.start,
+						  children: [
+							  Padding(
+							    padding: const EdgeInsets.only(left: 10.0),
+							    child: Text('${state.distance}K - 45K'),
+							  ),
+						    SizedBox(
+						    	height: MediaQuery.of(context).size.height * 0.15,
+						    	child: Slider(min: 0,max:45, value: state.distance.toDouble(), onChanged: (change){
+									racesViewModel.setDistance( change.toInt())	;
+						    	})
+						    ),
+						  ],
 						),
 					);
 				}else{

@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Races',
+      title: 'Racemate',
       theme: ThemeData(
         sliderTheme: const SliderThemeData(
           overlayColor: orangeColor,
@@ -37,7 +37,9 @@ class MyApp extends StatelessWidget {
               return const BorderSide(color: borderColor);
             })),
         iconTheme: const IconThemeData(color: blueColor),
-        inputDecorationTheme: InputDecorationTheme(activeIndicatorBorder: const BorderSide(color: orangeColor), focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: orangeColor), borderRadius: BorderRadius.circular(8)), border: OutlineInputBorder(borderSide: const BorderSide(color: orangeColor), borderRadius: BorderRadius.circular(8))),
+        inputDecorationTheme: InputDecorationTheme(
+            contentPadding:const EdgeInsets.all(3),
+            activeIndicatorBorder: const BorderSide(color: orangeColor), focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: orangeColor), borderRadius: BorderRadius.circular(8)), border: OutlineInputBorder(borderSide: const BorderSide(color: orangeColor), borderRadius: BorderRadius.circular(8))),
         checkboxTheme: CheckboxThemeData(overlayColor: MaterialStateColor.resolveWith((states) {
           return blueColor;
         }), fillColor: MaterialStateColor.resolveWith((states) {

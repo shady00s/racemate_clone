@@ -17,12 +17,12 @@ class RaceCardWidget extends StatelessWidget {
         elevation: 3,
         child: Row(
           children: [
-            const Expanded(flex: 2, child: Placeholder()),
+             Expanded(flex: 3, child: Image(image: AssetImage('assets/races_images/${raceData.image}') ,fit: BoxFit.cover,height:184 ,)),
             const SizedBox(
               width: 12,
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 3.0),
                 child: Column(
@@ -60,7 +60,7 @@ class RaceCardWidget extends StatelessWidget {
                             children: [
                               TextWithIcon(
                                 iconData: Icons.route,
-                                data: '${raceData.distances.join('K, ')}K',
+                                data: '${raceData.distances}K',
                               ),
                               TextWithIcon(
                                 iconData: Icons.date_range_rounded,
@@ -109,7 +109,7 @@ class TextWithIcon extends StatelessWidget {
           width: 4,
         ),
         SizedBox(
-          width: MediaQuery.sizeOf(context).width * 0.35,
+          width: MediaQuery.sizeOf(context).width * 0.33,
           child: Text(
             data,
             overflow: TextOverflow.ellipsis,

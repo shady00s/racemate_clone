@@ -6,7 +6,7 @@ class RacesDataModel {
   final String city;
   final String image;
   final String type;
-  final List<dynamic> distances;
+  final String distances;
 
   RacesDataModel({required this.name, required this.organizer, required this.date, required this.country, required this.city, required this.image, required this.type, required this.distances});
 
@@ -19,7 +19,7 @@ class RacesDataModel {
       city: json['city'],
       image: json['image'],
       type: json['type'],
-      distances: json['distances'].split(',').map((e) => double.parse(e)).toList(),
+      distances: json['distances'].split(',').map((e) => double.parse(e)).join('K, '),
     );
   }
 

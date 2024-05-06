@@ -10,7 +10,9 @@ class FetchingSuccessState extends RaceState {
 	final List<SelectedLocationFilterRacesModel>selectedLocationFilterRacesModel;
 	final List<FilterTypeModel>selectedFilterTypeModel;
 	final int numberOfFilters;
-	FetchingSuccessState(this.listOfRaces, this.selectedLocationFilterRacesModel, this.selectedFilterTypeModel, this.numberOfFilters);
+	final int distance;
+	final Map<String,int> filtersUsed;
+	FetchingSuccessState(this.listOfRaces,this.distance, this.selectedLocationFilterRacesModel, this.selectedFilterTypeModel, this.numberOfFilters,this.filtersUsed);
 }
 
 class FetchingFailedState extends RaceState {

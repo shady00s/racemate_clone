@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:optomatica_race/constants.dart';
 import 'package:optomatica_race/view/widgets/filter/modal_filter_widgets/type_filter.dart';
 import 'package:optomatica_race/view_model/bloc/states/race_state.dart';
 import 'package:optomatica_race/view_model/races_view_model.dart';
@@ -7,6 +8,7 @@ import '../../../view_model/bloc/race_bloc.dart';
 import 'clear_filter_button.dart';
 import 'filter_button.dart';
 import 'filter_submit_button.dart';
+import 'modal_filter_widgets/date_filter.dart';
 import 'modal_filter_widgets/distance_filter.dart';
 import 'modal_filter_widgets/location_filter.dart';
 
@@ -31,8 +33,7 @@ class RacesFilterWidget extends StatelessWidget {
                         height: 42,
                         child: ClearFilterButton(
                           racesViewModel: racesViewModel,
-
-                          numberOfFilters:state.numberOfFilters,
+                          numberOfFilters: state.numberOfFilters,
                           raceCubit: context.read<RaceCubit>(),
                         ),
                       )
@@ -52,28 +53,49 @@ class RacesFilterWidget extends StatelessWidget {
                         onCancel: racesViewModel.resetSelectLocations,
                         bottomWidget: SubmitFilterButton(
                           onPressed: () {
-                            racesViewModel.submitFilterData();
+                            racesViewModel.submitFilterData().then((value) => Navigator.pop(context));
+                          },
+                          title: 'Done',
+                        ),
+                        selected: state.filtersUsed['location'] == 1,
+                      ),
+                      FilterButtonWidget(
+                        selected: state.filtersUsed['types'] == 1,
+                        modal: racesViewModel.typeFilter,
+                        widget: FilterTypeWidget(racesViewModel: racesViewModel, raceCubit: context.read<RaceCubit>()),
+                        onCancel: racesViewModel.resetSelectLocations,
+                        bottomWidget: SubmitFilterButton(
+                          onPressed: () {
+                            racesViewModel.submitFilterData().then((value) => Navigator.pop(context));
+                          },
+                          title: 'Done',
+                        ),
+                        hasActiveFilters: true,
+                      ),
+                      FilterButtonWidget(
+                        selected: state.filtersUsed['distance'] == 1,
+                        hasActiveFilters: true,
+                        modal: racesViewModel.distanceFilter,
+                        widget: FilterDistanceWidget(racesViewModel: racesViewModel, raceCubit: context.read<RaceCubit>()),
+                        onCancel: racesViewModel.resetSelectDistance,
+                        bottomWidget: SubmitFilterButton(
+                          onPressed: () {
+                            racesViewModel.submitFilterData().then((value) => Navigator.pop(context));
                           },
                           title: 'Done',
                         ),
                       ),
                       FilterButtonWidget(
-                        modal: racesViewModel.typeFilter,
-                        widget: FilterTypeWidget(racesViewModel: racesViewModel, raceCubit: context.read<RaceCubit>()),
-                        onCancel: racesViewModel.resetSelectLocations,
-                        bottomWidget: SubmitFilterButton(
-                          onPressed: () {},
-                          title: 'Done',
-                        ),
+                        selected: state.filtersUsed['date'] == 1,
+
                         hasActiveFilters: true,
-                      ),
-                      FilterButtonWidget(
-                        hasActiveFilters: true,
-                        modal: racesViewModel.distanceFilter,
-                        widget: FilterDistanceWidget(racesViewModel: racesViewModel, raceCubit: context.read<RaceCubit>()),
-                        onCancel: racesViewModel.resetSelectLocations,
+                        modal: racesViewModel.dateFilter,
+                        widget: FilterDateWidget(racesViewModel: racesViewModel, raceCubit: context.read<RaceCubit>()),
+                        onCancel: racesViewModel.resetSelectDistance,
                         bottomWidget: SubmitFilterButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            racesViewModel.submitFilterData().then((value) => Navigator.pop(context));
+                          },
                           title: 'Done',
                         ),
                       ),

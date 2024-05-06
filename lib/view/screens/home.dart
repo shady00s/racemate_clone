@@ -55,11 +55,11 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            body: TabBarView(
+            body: const TabBarView(
               children: [
+                ChallengesScreen(),
+                CommunityScreen(),
                 RacesView(),
-                const ChallengesScreen(),
-                const CommunityScreen(),
               ],
             ),
           )),

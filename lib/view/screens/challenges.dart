@@ -5,6 +5,8 @@ class ChallengesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Padding(padding:  EdgeInsets.all(18.0), child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Center(child: Text('No challenges found'))
+    ]));
   }
 }

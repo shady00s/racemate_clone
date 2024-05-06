@@ -17,12 +17,12 @@ class ClearFilterWidget extends StatelessWidget {
         const SizedBox(height: 10,),
         SubmitFilterButton(
             onPressed: () {
-              racesViewModel.clearAllFilters();
-            },
+              Future.microtask(() => racesViewModel.clearAllFilters()).then((value) => Navigator.pop(context));
+              },
             title: 'Yes, Clear Filters'),
 		const SizedBox(height: 10,),
         CancelFilterButton(
-          onPressed: () {},
+          onPressed: () {Navigator.pop(context);},
           title: 'Cancel',
         ),
 		  const SizedBox(height: 10,),

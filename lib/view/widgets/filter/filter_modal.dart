@@ -28,7 +28,8 @@ Future<void> showFilterModal(BuildContext context, FilterButtonWidgetViewModel m
                     child: Text(
                       modal.filterModalTitle,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+
+                      style: const TextStyle(fontFamily: 'oswald',wordSpacing: 1,  fontWeight: FontWeight.bold, fontSize: 22),
                     )),
                 Expanded(
                     flex: 1,

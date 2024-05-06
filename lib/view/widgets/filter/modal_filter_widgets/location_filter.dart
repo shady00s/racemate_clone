@@ -19,19 +19,36 @@ class FilterLocationWidget extends StatelessWidget {
             return DecoratedBox(
               decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, style: BorderStyle.solid, width: 1))),
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: ListView.builder(
-                  shrinkWrap: false,
-                  itemCount: state.selectedLocationFilterRacesModel.length,
-                  itemBuilder: (context, index) => CheckboxListTile(
-                    selected: state.selectedLocationFilterRacesModel[index].selected,
-                    title: Text(state.selectedLocationFilterRacesModel[index].filterLocationModel.countries),
-                    value: state.selectedLocationFilterRacesModel[index].selected,
-                    onChanged: (newValue) {
-                      racesViewModel.filterLocationListGetter(state.selectedLocationFilterRacesModel[index], index, newValue);
-                    },
-                    controlAffinity: ListTileControlAffinity.trailing,
-                  ),
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+
+                          onChanged:(text){
+                                racesViewModel.locationsSearch(text);
+                          },
+
+                          decoration: InputDecoration(
+                          hintText: 'Search',suffixIcon: Icon(Icons.search)),),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: false,
+                        itemCount: state.selectedLocationFilterRacesModel.length,
+                        itemBuilder: (context, index) => CheckboxListTile(
+                          selected: state.selectedLocationFilterRacesModel[index].selected,
+                          title: Text(state.selectedLocationFilterRacesModel[index].filterLocationModel.countries),
+                          value: state.selectedLocationFilterRacesModel[index].selected,
+                          onChanged: (newValue) {
+                            racesViewModel.filterLocationListGetter(state.selectedLocationFilterRacesModel[index], index, newValue);
+                          },
+                          controlAffinity: ListTileControlAffinity.trailing,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

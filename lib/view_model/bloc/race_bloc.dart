@@ -14,8 +14,9 @@ class RaceCubit extends Cubit<RaceState> {
   List<String> typesList = [];
   DateTime? startDate;
   DateTime? endDate;
+  Map<String,int> filtersUsed ={};
   int numberOfFilters = 1;
-
+  int distance = 0;
   // Fetching data from JSON
   Future<void> getDataFromJson() async {
     try {
@@ -31,6 +32,47 @@ class RaceCubit extends Cubit<RaceState> {
     }
   }
 
+  //fetching data by limit
+  Future<void> getDataFromJsonByLimit() async {
+    try {
+      final String response = await rootBundle.loadString('assets/races_data.json');
+      await Future.delayed(const Duration(seconds: 1)); // Simulate delay
+      final List<dynamic> jsonData = json.decode(response);
+      final List<dynamic> first10JsonData = jsonData.take(10).toList();
+
+      List<RacesDataModel> data = first10JsonData.map((jsonItem) {
+        return RacesDataModel.fromJson(jsonItem);
+      }).toList();
+      listOfRaces = data;
+      await fetchData();
+      emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
+    } catch (err) {
+      emit(FetchingFailedState(error: err.toString()));
+    }
+  }
+
+  Future<void> getMoreDataFromJSON() async {
+    try {
+      final String response = await rootBundle.loadString('assets/races_data.json');
+      await Future.delayed(const Duration(seconds: 1)); // Simulate delay
+      final List<dynamic> jsonData = json.decode(response);
+
+      // Get the next 10 items to load
+      final List<dynamic> next10JsonData = jsonData.skip(listOfRaces.length).take(10).toList();
+
+      List<RacesDataModel> data = next10JsonData.map((jsonItem) {
+        return RacesDataModel.fromJson(jsonItem);
+      }).toList();
+
+      // Add the new data to the existing list
+      listOfRaces.addAll(data);
+
+      emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
+    } catch (err) {
+      emit(FetchingFailedState(error: err.toString()));
+    }
+  }
+
   // initialize  data from JSON and set the filters
   Future<void> fetchData() async {
     try {
@@ -38,7 +80,6 @@ class RaceCubit extends Cubit<RaceState> {
       //setting filters data
       getAllLocationsFilter();
       getAllTypesFilter();
-      emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
     } catch (err) {
       emit(FetchingFailedState(error: err.toString()));
     }
@@ -50,6 +91,7 @@ class RaceCubit extends Cubit<RaceState> {
     for (var e in listOfRaces) {
       if (countryCount[e.country] == null) {
         countryCount[e.country] = {'name': e.country, 'number': 1, 'data': e};
+        locationsList.add(e.country);
       } else {
         countryCount[e.country]['number'] += 1;
       }
@@ -62,6 +104,24 @@ class RaceCubit extends Cubit<RaceState> {
           ),
           racesDataModel: value['data']));
     });
+    filtersUsed['location'] = 1; // Update filter status
+
+  }
+
+  void locationsSearch(String search) {
+    if (search != '') {
+      List<SelectedLocationFilterRacesModel> newSelectedLocationFilterRacesModel = List.from(selectedLocationFilterRacesModel);
+      List<SelectedLocationFilterRacesModel> updatedList = newSelectedLocationFilterRacesModel.where((element) => element.racesDataModel.country.contains(search.trim())).toList();
+      emit(FetchingSuccessState(listOfRaces, distance, updatedList, selectedRaceTypeList, numberOfFilters,filtersUsed));
+    }
+  }
+
+  void racesSearch(String search) {
+    if (search != '') {
+      List<RacesDataModel> newListOfRaces = List.from(listOfRaces);
+      List<RacesDataModel> updatedList = newListOfRaces.where((element) => element.country.contains(search.trim()) || element.name.contains(search.trim())).toList();
+      emit(FetchingSuccessState(updatedList, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
+    }
   }
 
   //getting all race types
@@ -82,12 +142,11 @@ class RaceCubit extends Cubit<RaceState> {
   }
 
   Future<void> clearAllFilters() async {
-    await getDataFromJson();
+    await fetchData();
     numberOfFilters = 0;
     resetSelectLocations();
+    resetSelectDistance();
   }
-
-  void updateFilterNumber() {}
 
   // Set new selected races based on location filter
   void filterLocationListGetter(SelectedLocationFilterRacesModel data, int index, selected) {
@@ -104,7 +163,7 @@ class RaceCubit extends Cubit<RaceState> {
       locationsList.remove(newSelectedLocationFilterRacesModel.racesDataModel.country);
     }
     filterDistanceListGetter();
-    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
+    emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
   }
 
   // Set new selected races based on distance filter
@@ -125,7 +184,7 @@ class RaceCubit extends Cubit<RaceState> {
       }
 
       // Consider emitting state here or based on your application logic
-      emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
+      emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
     }
   }
 
@@ -139,28 +198,34 @@ class RaceCubit extends Cubit<RaceState> {
     }
   }
 
+  void setDistance(int number) {
+    distance = number;
+    emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
+  }
+
 // reset all filter locations to true (default)
   void resetSelectLocations() {
     for (var model in selectedLocationFilterRacesModel) {
       model.selected = true;
     }
-    emit(FetchingSuccessState(listOfRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
+    emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
   }
 
   void resetSelectDistance() {
-    // for (var model in selectedLocationFilterRacesModel) {
-    //   model.selected = false;
-    // }
-    // emit(FetchingSuccessState(listOfRaces,selectedLocationFilterRacesModel,raceTypeList));
+    distance = 0;
+    emit(FetchingSuccessState(listOfRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
   }
 
   void resetSelectTypes() {
-    // for (var model in selectedLocationFilterRacesModel) {
-    //   model.selected = false;
-    // }
     // emit(FetchingSuccessState(listOfRaces,selectedLocationFilterRacesModel,raceTypeList));
   }
 
+  void setStartDate(DateTime? startDate1){
+    startDate = startDate1;
+  }
+  void setEndDate(DateTime? endDate1){
+    endDate = endDate1;
+  }
   // re-fetch data from json by the filter options
   Future<void> submitFilterData() async {
     // to re-fetch data from json
@@ -168,10 +233,31 @@ class RaceCubit extends Cubit<RaceState> {
     List<RacesDataModel> filteredLocationRaces = List.from(listOfRaces);
     if (locationsList.isNotEmpty) {
       filteredLocationRaces = listOfRaces.where((element) => locationsList.contains(element.country)).toList();
+      filtersUsed['location'] = 1; // Update filter status
+
     }
     if (typesList.isNotEmpty) {
       filteredLocationRaces = listOfRaces.where((element) => typesList.contains(element.type)).toList();
+      filtersUsed['types'] = 1; // Update filter status
+
     }
-    emit(FetchingSuccessState(filteredLocationRaces, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters));
+    if (distance > 0) {
+      filteredLocationRaces = listOfRaces.where((e) {
+        List<double> distances = e.distances.split('K, ').map((double.parse)).toList();
+        return distances.any((distanceFromItems) => distanceFromItems.toInt() == distance);
+      }).toList();
+      // filteredLocationRaces = listOfRaces.where((element) => element.)
+      filtersUsed['distance'] = 1; // Update filter status
+
+    }
+    if(startDate != null && endDate !=null){
+      filtersUsed['date'] = 1; // Update filter status
+      filteredLocationRaces = listOfRaces.where((element) {
+        DateTime raceDate = DateTime.parse(element.date); // Convert race date string to DateTime
+        return raceDate.isAfter(startDate!) && raceDate.isBefore(endDate!);
+      }).toList();
+    }
+    numberOfFilters = filtersUsed.length;
+    emit(FetchingSuccessState(filteredLocationRaces, distance, selectedLocationFilterRacesModel, selectedRaceTypeList, numberOfFilters,filtersUsed));
   }
 }

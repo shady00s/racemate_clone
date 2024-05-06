@@ -12,40 +12,84 @@ class RacesView extends StatefulWidget {
   @override
   State<RacesView> createState() => _RacesViewState();
 }
+
 class _RacesViewState extends State<RacesView> {
   final RacesViewModel racesViewModel = RacesViewModel();
-    @override
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+  @override
   void initState() {
-        racesViewModel.fetchData();
+    racesViewModel.getDataFromJsonByLimit();
+    _scrollController.addListener(_onScroll);
+
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      // User has scrolled to the bottom
+      _loadMoreData();
+    }
+  }
+
+  void _loadMoreData() {
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+      racesViewModel.getMoreDataFromJSON().then((_){
+        setState(() {
+          _isLoading = false;
+        });
+      });
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<RaceCubit>.value(
-        value: racesViewModel.raceCubit,
-
+      value: racesViewModel.raceCubit,
       child: BlocBuilder<RaceCubit, RaceState>(
         builder: (context, state) {
           print(state);
           if (state is FetchingSuccessState) {
-            return Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                    const SearchWidget(),
-                     RacesFilterWidget(racesViewModel: racesViewModel,),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.listOfRaces.length,
-                      itemBuilder: (builder, index) => RaceCardWidget(
-                        raceData: state.listOfRaces[index],
+
+                return Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SearchWidget(
+                        racesViewModel: racesViewModel,
                       ),
-                    ),
+                      RacesFilterWidget(
+                        racesViewModel: racesViewModel,
+                      ),
+                    state.listOfRaces.isNotEmpty?
+                      Expanded(
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: state.listOfRaces.length,
+                            itemBuilder: (builder, index) => RaceCardWidget(
+                              raceData: state.listOfRaces[index],
+                            ),
+                          )
+                      ):Center(child: Text('No races found')),
+                      _isLoading? const SizedBox(child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Center(child: CircularProgressIndicator(),),
+                      ),) :const SizedBox()
+                    ],
                   ),
-                ],
-              ),
-            );
+                );
+
           } else if (state is FetchingFailedState) {
             return Center(
               child: Text('Error: ${state.error}'),
@@ -58,35 +102,3 @@ class _RacesViewState extends State<RacesView> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

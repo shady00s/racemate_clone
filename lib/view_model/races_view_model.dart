@@ -14,16 +14,26 @@ class RacesViewModel {
     return await raceCubit.fetchData();
   }
 
+  Future<void> getDataFromJsonByLimit() async {
+    return await raceCubit.getDataFromJsonByLimit();
+  }
+
+  Future<void> getMoreDataFromJSON() async {
+    return await raceCubit.getMoreDataFromJSON();
+  }
+
   void filterLocationListGetter(SelectedLocationFilterRacesModel value, int index, selected) {
     raceCubit.filterLocationListGetter(value, index, selected);
   }
 
-  void filterTypeListGetter(String value, int index,newValue) {
-    raceCubit.filterTypeListGetter(value, index,newValue);
+  void filterTypeListGetter(String value, int index, newValue) {
+    raceCubit.filterTypeListGetter(value, index, newValue);
   }
-  void clearAllFilters (){
+
+  void clearAllFilters() {
     raceCubit.clearAllFilters();
   }
+
   void resetSelectLocations() {
     raceCubit.resetSelectLocations();
   }
@@ -36,14 +46,35 @@ class RacesViewModel {
     raceCubit.resetSelectDistance();
   }
 
-  void submitFilterData() {
-    raceCubit.submitFilterData();
+  void setDistance(int number) {
+    raceCubit.setDistance(number);
   }
 
-  FilterButtonWidgetViewModel locationFilter = FilterButtonWidgetViewModel(filterTitle: 'Location', filterModalTitle: 'Race Location');
+  Future<void> submitFilterData() async {
+    await raceCubit.submitFilterData();
+  }
+
+  void locationsSearch(String search) {
+    raceCubit.locationsSearch(search);
+  }
+
+  void racesSearch(String search) {
+    raceCubit.racesSearch(search);
+  }
+  void setStartDate(DateTime? startDate) {
+    raceCubit.setStartDate(startDate);
+  }
+  void setEndDate(DateTime? endDate) {
+    raceCubit.setEndDate(endDate);
+  }
+
+  FilterButtonWidgetViewModel locationFilter = FilterButtonWidgetViewModel(filterTitle: 'Location', filterModalTitle: 'RACE LOCATION');
   FilterButtonWidgetViewModel typeFilter = FilterButtonWidgetViewModel(
     filterTitle: 'Type',
-    filterModalTitle: 'Race Type',
+    filterModalTitle: 'RACE TYPE',
   );
-  FilterButtonWidgetViewModel distanceFilter = FilterButtonWidgetViewModel(filterTitle: 'Distance', filterModalTitle: 'Race Distance');
+
+  FilterButtonWidgetViewModel dateFilter = FilterButtonWidgetViewModel(filterTitle: 'Date', filterModalTitle: 'RACE DATE');
+
+  FilterButtonWidgetViewModel distanceFilter = FilterButtonWidgetViewModel(filterTitle: 'Distance', filterModalTitle: 'RACE DISTANCE');
 }
